@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './modules/auth/database/models/User.model';
 import { AuthModule } from './modules/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './commom/jwtGuard/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -16,7 +18,12 @@ import { AuthModule } from './modules/auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}
 
