@@ -4,15 +4,17 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './modules/auth/database/models/User.model';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
 import { JwtAuthGuard } from './commom/jwtGuard/jwt-auth.guard';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     SequelizeModule.forRoot({
       dialect: 'sqlite',
       storage: '.db/data.sqlite3',
       autoLoadModels: true,
-      synchronize: false,
+      synchronize: true,
       models: [User],
     }),
     AuthModule,

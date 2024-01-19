@@ -8,13 +8,13 @@ import { IUserRepository } from 'src/modules/auth/database/repositories/abstract
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { IUserFiltered, IValidateUserDTO } from './login.dto';
+import { REPOSITORIES_NAME } from 'src/shared/enums/repository_enum';
 
 @Injectable()
 export class LoginService {
   constructor(
-    @Inject('UserRepository')
+    @Inject(REPOSITORIES_NAME.user_repository)
     private userRepository: IUserRepository,
-    
     private jwtService: JwtService,
   ) {}
 
@@ -27,7 +27,7 @@ export class LoginService {
       throw new NotFoundException('Usuario não encontrardado');
     }
 
-    if (!this.validatePasswordIsMatch(password)) {
+    if (!this.validatePasswordIsMatch(password, userExists.password)) {
       throw new UnauthorizedException('Email e/ou senha inválidos');
     }
 
@@ -53,8 +53,11 @@ export class LoginService {
     };
   }
 
-  private validatePasswordIsMatch(password: string) {
-    const isPasswordMatch = compare(password, password);
+  private async validatePasswordIsMatch(
+    password: string,
+    userPassword: string,
+  ) {
+    const isPasswordMatch = await compare(password, userPassword);
 
     if (!isPasswordMatch) {
       return false;

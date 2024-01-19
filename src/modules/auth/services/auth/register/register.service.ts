@@ -1,12 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { IUserRepository } from 'src/modules/auth/database/repositories/abstract/IUser.repository';
 import { IValidateRegisterUserDTO } from './register.dto';
-import { hash } from 'bcrypt';
+import { hash, genSalt } from 'bcrypt';
+import { REPOSITORIES_NAME } from 'src/shared/enums/repository_enum';
 
 @Injectable()
 export class RegisterService {
   constructor(
-    @Inject('UserRepository')
+    @Inject(REPOSITORIES_NAME.user_repository)
     private userRepository: IUserRepository,
   ) {}
 
@@ -16,11 +17,13 @@ export class RegisterService {
     });
 
     if (userExists) {
-      throw new Error('Email já cadastrado');
+      throw new UnauthorizedException('Email já cadastrado');
     }
 
-    if (this.validatePassword(password)) {
-      throw new Error('Senha deve ter no mínimo 6 caracteres');
+    if (!this.validatePassword(password)) {
+      throw new UnauthorizedException(
+        'Senha deve conter no mínimo 6 caracteres',
+      );
     }
 
     const hashedPassword = await this.hashPassword(password);
@@ -43,7 +46,8 @@ export class RegisterService {
   }
 
   private async hashPassword(password: string) {
-    const hashedPassword = await hash(password, process.env.ROUNDS_OF_HASHING);
+    const salt = await genSalt(10);
+    const hashedPassword = await hash(password, salt);
 
     return hashedPassword;
   }
