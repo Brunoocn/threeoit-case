@@ -12,7 +12,7 @@ import { JwtAuthGuard } from './commom/jwtGuard/jwt-auth.guard';
     ConfigModule.forRoot(),
     SequelizeModule.forRoot({
       dialect: 'sqlite',
-      storage: '.db/data.sqlite3',
+      storage: 'db/data.sqlite3',
       autoLoadModels: true,
       synchronize: true,
       models: [User],
