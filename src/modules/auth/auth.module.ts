@@ -10,20 +10,7 @@ import { RegisterService } from './services/auth/register/register.service';
 @Module({
   imports: [SequelizeModule.forFeature([User])],
   controllers: [AuthController],
-  providers: [
-    LoginService,
-    RegisterService,
-    JwtService,
-    {
-      provide: 'UserRepository',
-      useClass: UserRepository,
-    },
-  ],
-  exports: [
-    {
-      provide: 'UserRepository',
-      useClass: UserRepository,
-    },
-  ],
+  providers: [LoginService, RegisterService, JwtService, UserRepository],
+  exports: [UserRepository],
 })
 export class AuthModule {}
