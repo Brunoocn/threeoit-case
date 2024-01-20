@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { SkipAuth } from 'src/commom/decorators/skipAuth.decorator';
 import {
   ILoginResponseDTO,
@@ -15,6 +15,11 @@ export class AuthController {
     private readonly loginService: LoginService,
     private readonly registerService: RegisterService,
   ) {}
+
+  @Get('token-valid')
+  async validToken(): Promise<boolean> {
+    return true;
+  }
 
   @SkipAuth()
   @Post('/login')
