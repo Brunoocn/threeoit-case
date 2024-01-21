@@ -22,10 +22,6 @@ import { JwtStrategy } from './commom/jwtGuard/jwt.strategy';
       autoLoadModels: true,
       synchronize: true,
       models: [User],
-      sync: {
-        force: process.env.FORCE_SYNC === 'FORCE' ? true : false,
-        alter: { drop: false },
-      },
     }),
     AuthModule,
     CalculationsModule,
