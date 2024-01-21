@@ -13,7 +13,7 @@ Clone o projeto e acesse a pasta do mesmo.
 
 ```bash
 $ git clone https://github.com/Brunoocn/threeoit-case-back.git
-$ cd contemplato-backend
+$ cd threeoit-case-back
 ```
 
 Para iniciá-lo, siga os passos abaixo:
