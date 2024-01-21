@@ -13,11 +13,19 @@ import { JwtStrategy } from './commom/jwtGuard/jwt.strategy';
   imports: [
     ConfigModule.forRoot(),
     SequelizeModule.forRoot({
-      dialect: 'sqlite',
-      storage: 'db/data.sqlite3',
+      dialect: 'mysql',
+      host: process.env.MYSQL_HOST,
+      port: Number(process.env.MYSQL_PORT),
+      username: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_NAME,
       autoLoadModels: true,
       synchronize: true,
       models: [User],
+      sync: {
+        force: process.env.FORCE_SYNC === 'FORCE' ? true : false,
+        alter: { drop: false },
+      },
     }),
     AuthModule,
     CalculationsModule,
